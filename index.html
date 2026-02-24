@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Focus Browser</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══════════ TOOLBAR ═══════════ -->
+  <div id="toolbar">
+    <div id="nav-buttons">
+      <button id="back-btn" title="Back">◀</button>
+      <button id="forward-btn" title="Forward">▶</button>
+      <button id="refresh-btn" title="Refresh">⟳</button>
+      <button id="home-btn" title="Home">🏠</button>
+    </div>
+    <input  id="url-bar" type="text" placeholder="Enter URL..." spellcheck="false" />
+    <button id="go-btn">Go</button>
+    <button id="pdf-btn" title="Open PDF file">📄 PDF</button>
+  </div>
+
+  <!-- ═══════════ CHALLENGE OVERLAY ═══════════ -->
+  <div id="challenge-container">
+    <div id="challenge-content">
+
+      <h1>⛔ Website Blocked</h1>
+
+      <p class="blocked-info">
+        You are trying to visit:
+        <span id="blocked-url"></span>
+      </p>
+
+      <p class="instruction">
+        To access this website, <strong>type the entire paragraph below exactly as shown</strong>.
+        Copy-paste is disabled. No shortcuts. Just you and the keyboard.
+      </p>
+
+      <div id="challenge-text-display"></div>
+
+      <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+        <span id="progress-text">0 %</span>
+      </div>
+
+      <textarea
+        id="challenge-input"
+        placeholder="Start typing here..."
+        spellcheck="false"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+      ></textarea>
+
+      <div id="challenge-status"></div>
+
+      <div id="challenge-buttons">
+        <button id="give-up-btn">✕  Give Up &amp; Go Home</button>
+        <button id="submit-btn" disabled>✓  Access Website</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
