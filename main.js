@@ -2,13 +2,10 @@ const { app, BrowserWindow, BrowserView, ipcMain, dialog } = require('electron')
 const path = require('path');
 
 // ╔══════════════════════════════════════════════════╗
-// ║   🔧 CONFIGURATION — CHANGE YOUR SITES HERE     ║
+// ║   🔧 CONFIGURATION — ONLY arena.ai ALLOWED      ║
 // ╚══════════════════════════════════════════════════╝
 const ALLOWED_WEBSITES = [
-  'https://chat.openai.com'
-  // Add more allowed sites below, one per line:
-  // 'https://docs.google.com',
-  // 'https://example.com',
+  'https://arena.ai'
 ];
 // ════════════════════════════════════════════════════
 
@@ -18,7 +15,7 @@ let contentView;
 // --- URL Checking ---
 function isURLAllowed(url) {
   if (!url || url === '' || url === 'about:blank') return true;
-  if (url.startsWith('file://')) return true;       // Local PDFs
+  if (url.startsWith('file://')) return true;
   if (url.startsWith('chrome://')) return true;
   if (url.startsWith('devtools://')) return true;
   if (url.startsWith('data:')) return false;
@@ -57,7 +54,6 @@ function createWindow() {
   mainWindow.setMenuBarVisibility(false);
   mainWindow.loadFile('index.html');
 
-  // --- BrowserView for web content ---
   contentView = new BrowserView({
     webPreferences: {
       contextIsolation: true,
@@ -71,9 +67,6 @@ function createWindow() {
   contentView.setAutoResize({ width: true, height: true });
   contentView.webContents.loadURL(ALLOWED_WEBSITES[0]);
 
-  // ========== NAVIGATION INTERCEPTION ==========
-
-  // 1) Link clicks / JS navigation
   contentView.webContents.on('will-navigate', (event, url) => {
     if (!isURLAllowed(url)) {
       event.preventDefault();
@@ -81,7 +74,6 @@ function createWindow() {
     }
   });
 
-  // 2) Server-side redirects (HTTP 3xx)
   contentView.webContents.on('will-redirect', (event, url) => {
     if (!isURLAllowed(url)) {
       event.preventDefault();
@@ -89,7 +81,6 @@ function createWindow() {
     }
   });
 
-  // 3) window.open() / target="_blank"
   contentView.webContents.setWindowOpenHandler(({ url }) => {
     if (isURLAllowed(url)) {
       contentView.webContents.loadURL(url);
@@ -99,7 +90,6 @@ function createWindow() {
     return { action: 'deny' };
   });
 
-  // 4) Update URL bar after navigation
   contentView.webContents.on('did-navigate', (_event, url) => {
     mainWindow.webContents.send('url-changed', url);
   });
